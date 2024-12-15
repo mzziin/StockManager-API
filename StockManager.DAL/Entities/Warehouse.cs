@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StockManager.DAL.Models
+namespace StockManager.DAL.Entities
 {
     public class Warehouse
     {

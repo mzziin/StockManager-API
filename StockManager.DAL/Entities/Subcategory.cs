@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StockManager.DAL.Models
+namespace StockManager.DAL.Entities
 {
     public class Subcategory
     {

@@ -14,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 builder.Services.AddControllers();
 
+// Register Dependencies
+DALDependencies.Register(builder.Services);
+BLLDependencies.Register(builder.Services);
+
 // EFCore - SQLServer Configuration
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -57,10 +61,6 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!))
         };
     });
-
-// Register Dependencies
-DALDependencies.Register(builder.Services);
-BLLDependencies.Register(builder.Services);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using StockManager.DAL.Models;
+using StockManager.DAL.Entities;
 
 namespace StockManager.DAL.Data
 {
@@ -63,7 +63,10 @@ namespace StockManager.DAL.Data
             builder.Entity<Warehouse>()
                 .HasOne(w => w.WarehouseManager)
                 .WithOne()
-                .HasForeignKey<Warehouse>(w => w.WarehouseManagerId);
+                .HasForeignKey<Warehouse>(w => w.WarehouseManagerId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+
 
             // Disable cascading delete for
             // Category -> Subcategory 

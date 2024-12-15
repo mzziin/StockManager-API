@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StockManager.DAL.Models
+namespace StockManager.DAL.Entities
 {
     public class Sale
     {
@@ -15,9 +15,6 @@ namespace StockManager.DAL.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalAmount { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public required string CustomerName { get; set; }
         public DateTime SaleDateTime { get; set; } = DateTime.Now;
 
         public Guid TransactionId { get; set; }
@@ -25,6 +22,9 @@ namespace StockManager.DAL.Models
 
         public int WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; } = null!;
+
+        public Guid CustomerId { get; set; }
+        public Customer Customer { get; set; } = null!;
 
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }

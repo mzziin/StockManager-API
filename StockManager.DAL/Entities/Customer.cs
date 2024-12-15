@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StockManager.DAL.Models
+namespace StockManager.DAL.Entities
 {
     public class Customer
     {
@@ -14,5 +14,7 @@ namespace StockManager.DAL.Models
         [Required]
         [MaxLength(20)]
         public required string PhoneNumber { get; set; }
+
+        public ICollection<Sale> Customers { get; set; } = new List<Sale>();
     }
 }

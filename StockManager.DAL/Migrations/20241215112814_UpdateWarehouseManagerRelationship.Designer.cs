@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockManager.DAL.Data;
 
@@ -11,9 +12,11 @@ using StockManager.DAL.Data;
 namespace StockManager.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241215112814_UpdateWarehouseManagerRelationship")]
+    partial class UpdateWarehouseManagerRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,13 +55,13 @@ namespace StockManager.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "55fd1897-53c6-4ec5-9365-25e2591a0cbb",
+                            Id = "47fb07bc-e88e-4c93-94e0-a52f3b10388a",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6714912a-0764-42fa-9766-6b1cc07e58b6",
+                            Id = "5065dad5-e15b-4baa-9dae-6d7535e1ee49",
                             Name = "warehouse manager",
                             NormalizedName = "WAREHOUSE MANAGER"
                         });
@@ -368,8 +371,10 @@ namespace StockManager.DAL.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SupplierId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18, 2)");
@@ -385,8 +390,6 @@ namespace StockManager.DAL.Migrations
 
                     b.HasKey("PurchaseId");
 
-                    b.HasIndex("SupplierId");
-
                     b.HasIndex("TransactionId");
 
                     b.HasIndex("WarehouseId");
@@ -400,8 +403,10 @@ namespace StockManager.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -422,8 +427,6 @@ namespace StockManager.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SaleId");
-
-                    b.HasIndex("CustomerId");
 
                     b.HasIndex("TransactionId");
 
@@ -657,12 +660,6 @@ namespace StockManager.DAL.Migrations
 
             modelBuilder.Entity("StockManager.DAL.Entities.Purchase", b =>
                 {
-                    b.HasOne("StockManager.DAL.Entities.Supplier", "Supplier")
-                        .WithMany("Purchases")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StockManager.DAL.Entities.Transaction", "Transaction")
                         .WithMany("Purchases")
                         .HasForeignKey("TransactionId")
@@ -674,8 +671,6 @@ namespace StockManager.DAL.Migrations
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Supplier");
 
                     b.Navigation("Transaction");
 
@@ -684,12 +679,6 @@ namespace StockManager.DAL.Migrations
 
             modelBuilder.Entity("StockManager.DAL.Entities.Sale", b =>
                 {
-                    b.HasOne("StockManager.DAL.Entities.Customer", "Customer")
-                        .WithMany("Customers")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StockManager.DAL.Entities.Transaction", "Transaction")
                         .WithMany("Sales")
                         .HasForeignKey("TransactionId")
@@ -701,8 +690,6 @@ namespace StockManager.DAL.Migrations
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Transaction");
 
@@ -746,19 +733,9 @@ namespace StockManager.DAL.Migrations
                     b.Navigation("Subcategories");
                 });
 
-            modelBuilder.Entity("StockManager.DAL.Entities.Customer", b =>
-                {
-                    b.Navigation("Customers");
-                });
-
             modelBuilder.Entity("StockManager.DAL.Entities.Subcategory", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("StockManager.DAL.Entities.Supplier", b =>
-                {
-                    b.Navigation("Purchases");
                 });
 
             modelBuilder.Entity("StockManager.DAL.Entities.Transaction", b =>

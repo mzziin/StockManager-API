@@ -132,6 +132,25 @@ namespace StockManager.DAL.Data
                 .HasForeignKey(p => p.SubcategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<ProductWarehouse>()
+                .ToTable("ProductWarehouse");
+
+            builder.Entity<ProductWarehouse>()
+                .HasKey(pw => new { pw.ProductId, pw.WarehouseId });
+
+            builder.Entity<ProductWarehouse>()
+                .HasOne(pw => pw.Product)
+                .WithMany(p => p.ProductWarehouses)
+                .HasForeignKey(pw => pw.ProductId);
+
+            builder.Entity<ProductWarehouse>()
+                .HasOne(pw => pw.Warehouse)
+                .WithMany(w => w.ProductWarehouses)
+                .HasForeignKey(pw => pw.WarehouseId);
+
+            builder.Entity<ProductWarehouse>()
+                .Property(pw => pw.StockQuantity)
+                .HasColumnName("StockQuantity");
 
             // seed roles to Db
             List<IdentityRole> roles =

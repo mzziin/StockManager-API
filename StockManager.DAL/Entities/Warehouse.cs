@@ -26,7 +26,7 @@ namespace StockManager.DAL.Entities
         public IdentityUser? WarehouseManager { get; set; }
 
 
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new List<ProductWarehouse>();
         public ICollection<Sale> Sales { get; set; } = new List<Sale>();
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();

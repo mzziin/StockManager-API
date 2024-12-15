@@ -23,7 +23,7 @@ namespace StockManager.DAL.Entities
         public int SubcategoryId { get; set; }
         public Subcategory Subcategory { get; set; } = null!;
 
-        public ICollection<Warehouse> Warehouses { get; set; } = new List<Warehouse>();
+        public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new List<ProductWarehouse>();
         public ICollection<Sale> Sales { get; set; } = new List<Sale>();
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
 

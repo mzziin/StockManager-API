@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StockManager.DAL.Repositories;
-using StockManager.DAL.Repositories.IRepositories;
+using StockManager.DAL.Repositories.AuthRepository;
 
 namespace StockManager.DAL
 {

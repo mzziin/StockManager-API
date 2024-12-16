@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using StockManager.DAL.Repositories.IRepositories;
 
-namespace StockManager.DAL.Repositories
+namespace StockManager.DAL.Repositories.AuthRepository
 {
     public class AuthRepository : IAuthRepository
     {

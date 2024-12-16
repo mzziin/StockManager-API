@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace StockManager.DAL.Repositories.IRepositories
+namespace StockManager.DAL.Repositories.AuthRepository
 {
     public interface IAuthRepository
     {

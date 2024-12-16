@@ -4,7 +4,7 @@ using StockManager.BLL.Services.IServices;
 
 namespace StockManager.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -14,7 +14,7 @@ namespace StockManager.API.Controllers
             _authService = authService;
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> LoginUser([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)

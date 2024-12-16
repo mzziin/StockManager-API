@@ -3,7 +3,7 @@ using StockManager.BLL.ApiModels.ProductModels;
 
 namespace StockManager.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -14,7 +14,7 @@ namespace StockManager.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProductById([FromRoute] int id)
+        public IActionResult GetProductById([FromRoute] int productId)
         {
             throw new NotImplementedException();
         }
@@ -26,13 +26,13 @@ namespace StockManager.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct([FromBody] UpdateProductModel updateProductModel)
+        public IActionResult UpdateProduct([FromRoute] int productId, [FromBody] UpdateProductModel updateProductModel)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct([FromRoute] int id)
+        public IActionResult DeleteProduct([FromRoute] int productId)
         {
             throw new NotImplementedException();
         }

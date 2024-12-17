@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockManager.BLL.Services.CategoryService;
 
 namespace StockManager.API.Controllers
 {
@@ -6,16 +7,31 @@ namespace StockManager.API.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetAllCategories()
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-            throw new NotImplementedException();
+            _categoryService = categoryService;
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var response = await _categoryService.GetAllCategories();
+            if (response.Status)
+            {
+                return Ok(new { status = response.Status, message = response.Message, data = response.Data });
+            }
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpGet("{categoryId}/subcategories")]
-        public IActionResult GetAllSubcategories([FromRoute] int categoryId)
+        public async Task<IActionResult> GetAllSubcategories([FromRoute] int categoryId)
         {
-            throw new NotImplementedException();
+            var response = await _categoryService.GetAllSubCategories(categoryId);
+            if (response.Status)
+            {
+                return Ok(new { status = response.Status, message = response.Message, data = response.Data });
+            }
+            return NotFound(new { status = response.Status, message = response.Message });
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs;
 
-namespace StockManager.BLL.Services.IServices
+namespace StockManager.BLL.Services.AuthServices
 {
     public interface IAuthService
     {

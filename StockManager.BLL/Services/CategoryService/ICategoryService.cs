@@ -1,11 +1,11 @@
 ﻿using StockManager.BLL.ApiModels;
-using StockManager.DAL.Entities;
+using StockManager.BLL.DTOs.Category;
 
 namespace StockManager.BLL.Services.CategoryService
 {
     public interface ICategoryService
     {
-        Task<ResponseModel<List<Category>>> GetAllCategories();
-        Task<ResponseModel<List<Category>>> GetAllSubCategories(int categoryId);
+        Task<ResponseModel<List<outCategoryDto>>> GetAllCategories();
+        Task<ResponseModel<List<outSubcategoryDto>>> GetAllSubCategories(int categoryId);
     }
 }

@@ -12,10 +12,9 @@ namespace StockManager.DAL.Repositories.CategoryRepositories
             _context = dbContext;
         }
 
-        public async Task<IEnumerable<Category>> GetAllSubCategories(int categoryId)
+        public async Task<IEnumerable<Subcategory>> GetAllSubCategories(int categoryId)
         {
-            return await _context.Categories
-                .Include(c => c.Subcategories)
+            return await _context.Subcategories
                 .Where(c => c.CategoryId == categoryId)
                 .ToListAsync();
         }

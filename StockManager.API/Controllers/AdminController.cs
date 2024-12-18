@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs;
+using StockManager.BLL.DTOs.Category;
 
 namespace StockManager.API.Controllers
 {
@@ -71,6 +72,8 @@ namespace StockManager.API.Controllers
             throw new NotImplementedException();
         }
 
+        // Warehouse related endpoints
+
         [HttpGet("warehouses")]
         public IActionResult GetAllWarehouses()
         {
@@ -103,6 +106,50 @@ namespace StockManager.API.Controllers
 
         [HttpPost("warehouses/{warehouseId}/assign-manager")]
         public IActionResult AssignManagerToWarehouse([FromRoute] int warehouseId, [FromQuery] int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Categories related endpoints
+
+        [HttpPost("categories")]
+        public IActionResult CreateCategory([FromBody] CategoryDto categoryDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("categories/{categoryId}")]
+        public IActionResult UpdateCategory([FromBody] CategoryDto categoryDto, [FromRoute] int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("categories/{categoryId}")]
+        public IActionResult DeleteCategory([FromRoute] int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Subcategories related endpoints
+
+        [HttpPost("categories/{categoryId}/subcategories")]
+        public IActionResult CreateSubcategory([FromBody] SubcategoryDto subcategoryDto, [FromRoute] int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("categories/{categoryId}/subcategories/{subcategoryId}")]
+        public IActionResult UpdateSubcategory(
+            [FromBody] SubcategoryDto subcategoryDto,
+            [FromRoute] int categoryId,
+            [FromRoute] int subcategoryId
+            )
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("categories/{categoryId}/subcategories/{subcategoryId}")]
+        public IActionResult DeleteSubcategory([FromRoute] int categoryId, [FromRoute] int subcategoryId)
         {
             throw new NotImplementedException();
         }

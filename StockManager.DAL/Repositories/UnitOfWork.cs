@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using StockManager.DAL.Data;
 using StockManager.DAL.Entities;
-using StockManager.DAL.Repositories.CategoryRepositories;
 
 namespace StockManager.DAL.Repositories
 {
@@ -12,7 +11,7 @@ namespace StockManager.DAL.Repositories
         private bool _disposed = false;
 
         public IGenericRepository<Product> Products { get; private set; }
-        public ICategoryRepository Categories { get; private set; }
+        public IGenericRepository<Category> Categories { get; private set; }
         public IGenericRepository<Customer> Customers { get; private set; }
         public IGenericRepository<Purchase> Purchases { get; private set; }
         public IGenericRepository<Sale> Sales { get; private set; }
@@ -25,7 +24,7 @@ namespace StockManager.DAL.Repositories
         {
             _context = appDbContext;
             Products = new GenericRepository<Product>(_context);
-            Categories = new CategoryRepository(_context);
+            Categories = new GenericRepository<Category>(_context);
             Customers = new GenericRepository<Customer>(_context);
             Purchases = new GenericRepository<Purchase>(_context);
             Sales = new GenericRepository<Sale>(_context);

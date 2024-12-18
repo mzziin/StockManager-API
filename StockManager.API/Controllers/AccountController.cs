@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.ApiModels;
-using StockManager.BLL.Services.IServices;
+using StockManager.BLL.Services.AuthServices;
 
 namespace StockManager.API.Controllers
 {

@@ -3,13 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs;
-using StockManager.BLL.Services.IServices;
 using StockManager.DAL.Repositories.AuthRepository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace StockManager.BLL.Services
+namespace StockManager.BLL.Services.AuthServices
 {
     public class AuthService : IAuthService
     {

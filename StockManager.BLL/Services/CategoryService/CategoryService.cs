@@ -1,5 +1,5 @@
 ﻿using StockManager.BLL.ApiModels;
-using StockManager.DAL.Entities;
+using StockManager.BLL.DTOs.Category;
 using StockManager.DAL.Repositories;
 
 namespace StockManager.BLL.Services.CategoryService
@@ -12,42 +12,57 @@ namespace StockManager.BLL.Services.CategoryService
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseModel<List<Category>>> GetAllCategories()
+        public async Task<ResponseModel<List<outCategoryDto>>> GetAllCategories()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync();
-            if (categories.Any())
+            var dbCategories = await _unitOfWork.Categories.GetAllAsync();
+            if (dbCategories == null || !dbCategories.Any())
             {
-                return new ResponseModel<List<Category>>
+                return new ResponseModel<List<outCategoryDto>>
                 {
-                    Status = true,
-                    Message = "categories fetched successfully",
-                    Data = categories.ToList()
+                    Status = false,
+                    Message = "No categories found",
                 };
             }
-            return new ResponseModel<List<Category>>
+
+            var categories = dbCategories.Select(p => new outCategoryDto
             {
-                Status = false,
-                Message = "No categories found",
+                CategoryId = p.CategoryId,
+                CategoryName = p.CategoryName
+            }).ToList();
+
+            return new ResponseModel<List<outCategoryDto>>
+            {
+                Status = true,
+                Message = "categories fetched successfully",
+                Data = categories
             };
         }
 
-        public async Task<ResponseModel<List<Category>>> GetAllSubCategories(int categoryId)
+        public async Task<ResponseModel<List<outSubcategoryDto>>> GetAllSubCategories(int categoryId)
         {
-            var subCategories = await _unitOfWork.Categories.GetAllSubCategories(categoryId);
-            if (subCategories.Any())
+            var dbSubcategories = await _unitOfWork.Subcategories.GetAllByExpressionAsync(c => c.CategoryId == categoryId);
+            if (dbSubcategories == null || !dbSubcategories.Any())
             {
-                return new ResponseModel<List<Category>>
+                return new ResponseModel<List<outSubcategoryDto>>
                 {
-                    Status = true,
-                    Message = "subcategories fetched successfully",
-                    Data = subCategories.ToList()
+                    Status = false,
+                    Message = $"No subcategories found for category ID: {categoryId}",
                 };
             }
-            return new ResponseModel<List<Category>>
+
+            var subcategories = dbSubcategories.Select(s => new outSubcategoryDto
             {
-                Status = false,
-                Message = $"No subcategories found for category ID: {categoryId}",
+                SubcategoryId = s.SubcategoryId,
+                SubcategoryName = s.SubcategoryName
+            });
+
+            return new ResponseModel<List<outSubcategoryDto>>
+            {
+                Status = true,
+                Message = "successfully fetched all subcategories",
+                Data = subcategories.ToList()
             };
+
         }
     }
 }

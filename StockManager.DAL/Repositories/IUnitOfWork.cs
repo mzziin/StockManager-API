@@ -1,12 +1,11 @@
 ﻿using StockManager.DAL.Entities;
-using StockManager.DAL.Repositories.CategoryRepositories;
 
 namespace StockManager.DAL.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<Product> Products { get; }
-        ICategoryRepository Categories { get; }
+        IGenericRepository<Category> Categories { get; }
         IGenericRepository<Customer> Customers { get; }
         IGenericRepository<Purchase> Purchases { get; }
         IGenericRepository<Sale> Sales { get; }

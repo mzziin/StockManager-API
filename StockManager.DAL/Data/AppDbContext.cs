@@ -75,7 +75,7 @@ namespace StockManager.DAL.Data
                 .WithOne(c => c.Category)
                 .HasForeignKey(c => c.CategoryId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Subcategory -> Product 
             builder.Entity<Subcategory>()

@@ -7,6 +7,11 @@ namespace StockManager.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+
+        public ProductController()
+        {
+
+        }
         [HttpGet]
         public IActionResult GetAllProducts()
         {

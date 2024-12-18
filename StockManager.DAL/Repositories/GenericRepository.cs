@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using StockManager.DAL.Data;
+using System.Linq.Expressions;
 
 namespace StockManager.DAL.Repositories
 {
@@ -25,7 +26,14 @@ namespace StockManager.DAL.Repositories
         {
             return await _db.FindAsync(id);
         }
-
+        public async Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _db.FirstOrDefaultAsync(expression);
+        }
+        public async Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _db.Where(expression).ToListAsync();
+        }
         public async Task<bool> InsertAsync(T entity)
         {
             try

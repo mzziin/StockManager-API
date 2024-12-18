@@ -18,9 +18,18 @@ namespace StockManager.API.Controllers
             var response = await _categoryService.GetAllCategories();
             if (response.Status)
             {
-                return Ok(new { status = response.Status, message = response.Message, data = response.Data });
+                return Ok(new
+                {
+                    status = response.Status,
+                    message = response.Message,
+                    data = response.Data
+                });
             }
-            return NotFound(new { status = response.Status, message = response.Message });
+            return NotFound(new
+            {
+                status = response.Status,
+                message = response.Message
+            });
         }
 
         [HttpGet("{categoryId}/subcategories")]
@@ -29,9 +38,18 @@ namespace StockManager.API.Controllers
             var response = await _categoryService.GetAllSubCategories(categoryId);
             if (response.Status)
             {
-                return Ok(new { status = response.Status, message = response.Message, data = response.Data });
+                return Ok(new
+                {
+                    status = response.Status,
+                    message = response.Message,
+                    data = response.Data
+                });
             }
-            return NotFound(new { status = response.Status, message = response.Message });
+            return NotFound(new
+            {
+                status = response.Status,
+                message = response.Message
+            });
         }
     }
 }

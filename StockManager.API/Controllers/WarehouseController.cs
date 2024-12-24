@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.ApiModels.ProductModels;
+using StockManager.BLL.Services.WarehouseService;
 
 namespace StockManager.API.Controllers
 {
@@ -7,6 +8,12 @@ namespace StockManager.API.Controllers
     [ApiController]
     public class WarehouseController : ControllerBase
     {
+        private readonly WarehouseService _warehouseService;
+        public WarehouseController(WarehouseService warehouseService)
+        {
+            _warehouseService = warehouseService;
+        }
+
 
         [HttpGet("{warehouseId}/transactions")]
         public IActionResult GetTransactions(
@@ -40,18 +47,19 @@ namespace StockManager.API.Controllers
         }
 
         [HttpGet("{warehouseId}/products")]
-        public IActionResult GetProducts(
+        public async Task<IActionResult> GetProducts(
             [FromRoute] int warehouseId,
-            [FromQuery] int? categoryId,
             [FromQuery] int? subcategoryId,
             [FromQuery] string productName,
-            [FromQuery] string sortBy = "ProductName",
-            [FromQuery] string sortOrder = "asc",
-            [FromQuery] int? pageIndex = 1,
-            [FromQuery] int? pageSize = 20
+            [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 20
             )
         {
-            throw new NotImplementedException();
+            var result = await _warehouseService.GetAllProductsFromWarehouse(warehouseId, subcategoryId, productName, pageIndex, pageSize);
+            if (result.Status)
+                return Ok(result.Data);
+
+            return NotFound(new { status = result.Status, message = result.Message });
         }
     }
 }

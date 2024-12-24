@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StockManager.BLL.ApiModels.ProductModels
+namespace StockManager.BLL.DTOs.Product
 {
-    public class UpdateProductModel
+    public class addProductDto
     {
         [Required]
         [MaxLength(100)]
@@ -12,7 +11,10 @@ namespace StockManager.BLL.ApiModels.ProductModels
         [MaxLength(500)]
         public string? ProductDescription { get; set; }
 
-        [Column(TypeName = "decimal(18, 2)")]
+        [Required]
         public decimal Price { get; set; }
+        public int Quantity { get; set; } = 0;
+
+        public int? SubcategoryId { get; set; } = null;
     }
 }

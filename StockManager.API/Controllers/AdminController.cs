@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Category;
+using StockManager.BLL.Services.CategoryService;
 
 namespace StockManager.API.Controllers
 {
@@ -8,6 +9,12 @@ namespace StockManager.API.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
+        private readonly ICategoryService _categoryService;
+        public AdminController(ICategoryService categoryService)
+        {
+            _categoryService = categoryService;
+        }
+
         // customer related endpoints
 
         [HttpGet("customers")]
@@ -113,9 +120,16 @@ namespace StockManager.API.Controllers
         // Categories related endpoints
 
         [HttpPost("categories")]
-        public IActionResult CreateCategory([FromBody] CategoryDto categoryDto)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryDto categoryDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(categoryDto);
+
+            var response = await _categoryService.AddCategory(categoryDto);
+
+            if (response.Status)
+                return Ok(new { result = "success", data = categoryDto });
+            return StatusCode(500, new { result = "fail", message = response.Message });
         }
 
         [HttpPut("categories/{categoryId}")]

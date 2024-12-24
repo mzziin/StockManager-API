@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StockManager.BLL.ApiModels.ProductModels;
+using StockManager.BLL.DTOs.Product;
+using StockManager.BLL.Services.ProductService;
 
 namespace StockManager.API.Controllers
 {
@@ -7,39 +8,65 @@ namespace StockManager.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-
-        public ProductController()
+        private readonly IProductService _productService;
+        public ProductController(IProductService productService)
         {
-
+            _productService = productService;
         }
+
         [HttpGet]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
-            throw new NotImplementedException();
+            var response = await _productService.GetAllProducts();
+
+            if (!response.Status)
+                return BadRequest(response.Message);
+            return Ok(response.Data);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetProductById([FromRoute] int productId)
+        [HttpGet("{productId}")]
+        public async Task<IActionResult> GetProductById([FromRoute] int productId)
         {
-            throw new NotImplementedException();
+            var response = await _productService.GetProductById(productId);
+
+            if (!response.Status)
+                return BadRequest(response.Message);
+            return Ok(response.Data);
         }
 
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] CreateProductModel createProductModel)
+        public async Task<IActionResult> CreateProduct([FromBody] addProductDto addProductDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = await _productService.CreateProduct(addProductDto);
+            if (!response.Status)
+                return BadRequest(response.Message);
+            return Ok(response.Data);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateProduct([FromRoute] int productId, [FromBody] UpdateProductModel updateProductModel)
+        [HttpPut("{productId}")]
+        public async Task<IActionResult> UpdateProduct([FromRoute] int productId, [FromBody] editProductDto editProductDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = await _productService.UpdateProduct(productId, editProductDto);
+
+            if (!response.Status)
+                return BadRequest(response.Message);
+            return Ok(response.Message);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteProduct([FromRoute] int productId)
+        [HttpDelete("{productId}")]
+        public async Task<IActionResult> DeleteProduct([FromRoute] int productId)
         {
-            throw new NotImplementedException();
+            var response = await _productService.DeleteProduct(productId);
+
+            if (!response.Status)
+                return BadRequest(response.Message);
+            return Ok(response.Message);
         }
     }
 }

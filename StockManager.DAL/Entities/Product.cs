@@ -20,12 +20,11 @@ namespace StockManager.DAL.Entities
         public int Quantity { get; set; }
         public DateTime UpdatedDateTime { get; set; } = DateTime.Now;
 
-        public int SubcategoryId { get; set; }
-        public Subcategory Subcategory { get; set; } = null!;
+        public int? SubcategoryId { get; set; }
+        public Subcategory? Subcategory { get; set; }
 
         public ICollection<ProductWarehouse> ProductWarehouses { get; set; } = new List<ProductWarehouse>();
         public ICollection<Sale> Sales { get; set; } = new List<Sale>();
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
-
     }
 }

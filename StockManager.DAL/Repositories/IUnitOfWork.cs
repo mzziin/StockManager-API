@@ -1,4 +1,5 @@
 ﻿using StockManager.DAL.Entities;
+using StockManager.DAL.Repositories.ProductWarehouseRepositories;
 
 namespace StockManager.DAL.Repositories
 {
@@ -13,9 +14,10 @@ namespace StockManager.DAL.Repositories
         IGenericRepository<Supplier> Suppliers { get; }
         IGenericRepository<Transaction> Transactions { get; }
         IGenericRepository<Warehouse> Warehouses { get; }
+        IProductWarehouseRepository ProductWarehouses { get; }
         Task BeginTransaction();
         Task RollBack();
-        Task Save();
+        Task SaveAsync();
         Task Commit();
     }
 }

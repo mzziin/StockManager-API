@@ -1,5 +1,6 @@
 ﻿using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs.Category;
+using StockManager.DAL.Entities;
 using StockManager.DAL.Repositories;
 
 namespace StockManager.BLL.Services.CategoryService
@@ -10,6 +11,24 @@ namespace StockManager.BLL.Services.CategoryService
         public CategoryService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<ResponseModel<CategoryDto>> AddCategory(CategoryDto categoryDto)
+        {
+            var category = new Category { CategoryName = categoryDto.CategoryName };
+            var status = await _unitOfWork.Categories.InsertAsync(category);
+            await _unitOfWork.SaveAsync();
+            if (status)
+                return new ResponseModel<CategoryDto>
+                {
+                    Status = status,
+                    Message = "category created successfully"
+                };
+            return new ResponseModel<CategoryDto>
+            {
+                Status = status,
+                Message = "Something went wrong"
+            };
         }
 
         public async Task<ResponseModel<List<outCategoryDto>>> GetAllCategories()

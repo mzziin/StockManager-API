@@ -70,12 +70,11 @@ namespace StockManager.DAL.Data
 
             // Disable cascading delete for
             // Category -> Subcategory 
-            builder.Entity<Category>()
-                .HasMany(c => c.Subcategories)
-                .WithOne(c => c.Category)
-                .HasForeignKey(c => c.CategoryId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Subcategory>()
+                .HasOne(s => s.Category)
+                .WithMany(c => c.Subcategories)
+                .HasForeignKey(s => s.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Subcategory -> Product 
             builder.Entity<Subcategory>()
@@ -84,6 +83,14 @@ namespace StockManager.DAL.Data
                 .HasForeignKey(e => e.SubcategoryId)
                 .IsRequired(required: false)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //product -> subcategory
+            builder.Entity<Product>()
+                .HasOne(p => p.Subcategory)
+                .WithMany(s => s.Products)
+                .HasForeignKey(p => p.SubcategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // Warehouse -> Transaction 
             builder.Entity<Warehouse>()

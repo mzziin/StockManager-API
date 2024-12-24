@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using StockManager.DAL.Data;
 using StockManager.DAL.Entities;
+using StockManager.DAL.Repositories.ProductWarehouseRepositories;
 
 namespace StockManager.DAL.Repositories
 {
@@ -19,6 +20,7 @@ namespace StockManager.DAL.Repositories
         public IGenericRepository<Supplier> Suppliers { get; private set; }
         public IGenericRepository<Transaction> Transactions { get; private set; }
         public IGenericRepository<Warehouse> Warehouses { get; private set; }
+        public IProductWarehouseRepository ProductWarehouses { get; private set; }
 
         public UnitOfWork(AppDbContext appDbContext)
         {
@@ -32,6 +34,7 @@ namespace StockManager.DAL.Repositories
             Suppliers = new GenericRepository<Supplier>(_context);
             Transactions = new GenericRepository<Transaction>(_context);
             Warehouses = new GenericRepository<Warehouse>(_context);
+            ProductWarehouses = new ProductWarehouseRepository(_context);
         }
 
         public async Task BeginTransaction()
@@ -59,7 +62,7 @@ namespace StockManager.DAL.Repositories
                 if (_transaction != null)
                 {
                     await _transaction.DisposeAsync();
-                    _transaction = null;
+                    _transaction = null!;
                 }
             }
         }
@@ -81,7 +84,7 @@ namespace StockManager.DAL.Repositories
             }
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             try
             {

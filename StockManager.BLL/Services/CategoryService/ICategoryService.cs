@@ -7,5 +7,6 @@ namespace StockManager.BLL.Services.CategoryService
     {
         Task<ResponseModel<List<outCategoryDto>>> GetAllCategories();
         Task<ResponseModel<List<outSubcategoryDto>>> GetAllSubCategories(int categoryId);
+        Task<ResponseModel<CategoryDto>> AddCategory(CategoryDto categoryDto);
     }
 }

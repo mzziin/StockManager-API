@@ -2,6 +2,7 @@
 using StockManager.DAL.Data;
 using StockManager.DAL.Entities;
 using StockManager.DAL.Repositories.ProductWarehouseRepositories;
+using StockManager.DAL.Repositories.TransactionRepositories;
 
 namespace StockManager.DAL.Repositories
 {
@@ -18,8 +19,10 @@ namespace StockManager.DAL.Repositories
         public IGenericRepository<Sale> Sales { get; private set; }
         public IGenericRepository<Subcategory> Subcategories { get; private set; }
         public IGenericRepository<Supplier> Suppliers { get; private set; }
-        public IGenericRepository<Transaction> Transactions { get; private set; }
         public IGenericRepository<Warehouse> Warehouses { get; private set; }
+        public IGenericRepository<ProductSale> ProductSales { get; private set; }
+        public IGenericRepository<ProductPurchase> ProductPurchases { get; private set; }
+        public ITransactionRepository Transactions { get; private set; }
         public IProductWarehouseRepository ProductWarehouses { get; private set; }
 
         public UnitOfWork(AppDbContext appDbContext)
@@ -32,20 +35,24 @@ namespace StockManager.DAL.Repositories
             Sales = new GenericRepository<Sale>(_context);
             Subcategories = new GenericRepository<Subcategory>(_context);
             Suppliers = new GenericRepository<Supplier>(_context);
-            Transactions = new GenericRepository<Transaction>(_context);
             Warehouses = new GenericRepository<Warehouse>(_context);
+            ProductSales = new GenericRepository<ProductSale>(_context);
+            ProductPurchases = new GenericRepository<ProductPurchase>(_context);
+            Transactions = new TransactionRepository(_context);
             ProductWarehouses = new ProductWarehouseRepository(_context);
         }
 
-        public async Task BeginTransaction()
+        public async Task BeginTransactionAsync()
         {
-            if (_transaction == null)
+            if (_transaction != null)
             {
-                _transaction = await _context.Database.BeginTransactionAsync();
+                throw new InvalidOperationException("A transaction is already in progress.");
             }
+            _transaction = await _context.Database.BeginTransactionAsync();
         }
 
-        public async Task Commit()
+
+        public async Task CommitAsync()
         {
             try
             {
@@ -108,8 +115,8 @@ namespace StockManager.DAL.Repositories
             {
                 if (disposing)
                 {
-                    _transaction?.Dispose();
-                    _context?.Dispose();
+                    _transaction?.DisposeAsync();
+                    _context?.DisposeAsync();
                 }
                 _disposed = true;
             }

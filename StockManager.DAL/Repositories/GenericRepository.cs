@@ -17,23 +17,14 @@ namespace StockManager.DAL.Repositories
             _db = _context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await _db.ToListAsync();
-        }
+        public async Task<IEnumerable<T>> GetAllAsync() => await _db.ToListAsync();
 
-        public async Task<T?> GetByIdAsync(int id)
-        {
-            return await _db.FindAsync(id);
-        }
-        public async Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression)
-        {
-            return await _db.FirstOrDefaultAsync(expression);
-        }
-        public async Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T, bool>> expression)
-        {
-            return await _db.Where(expression).ToListAsync();
-        }
+        public async Task<T?> GetByIdAsync(int id) => await _db.FindAsync(id);
+
+        public async Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression) => await _db.FirstOrDefaultAsync(expression);
+
+        public async Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T, bool>> expression) => await _db.Where(expression).ToListAsync();
+
         public async Task<bool> InsertAsync(T entity)
         {
             try

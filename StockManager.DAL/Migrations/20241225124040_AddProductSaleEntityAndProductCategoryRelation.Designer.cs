@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockManager.DAL.Data;
 
@@ -11,9 +12,11 @@ using StockManager.DAL.Data;
 namespace StockManager.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241225124040_AddProductSaleEntityAndProductCategoryRelation")]
+    partial class AddProductSaleEntityAndProductCategoryRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,13 +55,13 @@ namespace StockManager.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "84ea9d48-cd66-4f9b-acdc-9ef680f135aa",
+                            Id = "890fe5e6-fbfa-45db-a895-1d1f78986842",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "dd513648-319d-4f4a-a7ae-75745023d683",
+                            Id = "efe52176-8051-4869-bb1a-39f55376b5f0",
                             Name = "warehouse manager",
                             NormalizedName = "WAREHOUSE MANAGER"
                         });

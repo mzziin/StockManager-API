@@ -66,7 +66,7 @@ namespace StockManager.API.Controllers
 
             if (!response.Status)
                 return BadRequest(response.Message);
-            return Ok(response.Message);
+            return NoContent();
         }
     }
 }

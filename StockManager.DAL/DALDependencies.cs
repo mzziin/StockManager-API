@@ -2,6 +2,7 @@
 using StockManager.DAL.Repositories;
 using StockManager.DAL.Repositories.AuthRepository;
 using StockManager.DAL.Repositories.ProductWarehouseRepositories;
+using StockManager.DAL.Repositories.TransactionRepositories;
 
 namespace StockManager.DAL
 {
@@ -12,6 +13,7 @@ namespace StockManager.DAL
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductWarehouseRepository, ProductWarehouseRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
         }
     }
 }

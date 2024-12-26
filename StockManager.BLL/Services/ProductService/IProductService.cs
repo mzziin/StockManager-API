@@ -10,5 +10,6 @@ namespace StockManager.BLL.Services.ProductService
         Task<ResponseModel<List<outProductDto>>> GetAllProducts();
         Task<ResponseModel<outProductDto>> GetProductById(int productId);
         Task<ResponseModel<outProductDto>> UpdateProduct(int productId, editProductDto editProductDto);
+        Task<ResponseModel<object>> SellProduct(int productId, int warehouseId, int quantity, Guid customerId);
     }
 }

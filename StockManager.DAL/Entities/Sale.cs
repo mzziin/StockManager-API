@@ -26,6 +26,6 @@ namespace StockManager.DAL.Entities
         public Guid CustomerId { get; set; }
         public Customer Customer { get; set; } = null!;
 
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public ICollection<ProductSale> ProductSales { get; set; } = new List<ProductSale>();
     }
 }

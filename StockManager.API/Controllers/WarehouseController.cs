@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StockManager.BLL.ApiModels.ProductModels;
+using StockManager.BLL.Services.ProductService;
 using StockManager.BLL.Services.WarehouseService;
 
 namespace StockManager.API.Controllers
@@ -8,40 +8,58 @@ namespace StockManager.API.Controllers
     [ApiController]
     public class WarehouseController : ControllerBase
     {
-        private readonly WarehouseService _warehouseService;
-        public WarehouseController(WarehouseService warehouseService)
+        private readonly IWarehouseService _warehouseService;
+        private readonly IProductService _productService;
+
+        public WarehouseController(IWarehouseService warehouseService, IProductService productService)
         {
             _warehouseService = warehouseService;
+            _productService = productService;
         }
 
 
         [HttpGet("{warehouseId}/transactions")]
-        public IActionResult GetTransactions(
+        public async Task<IActionResult> GetTransactions(
             [FromRoute] int warehouseId,
             [FromQuery] string transactionType,
             [FromQuery] string startDate,
             [FromQuery] string endDate,
-            [FromQuery] int? pageIndex = 1,
-            [FromQuery] int? pageSize = 10
+            [FromQuery] int pageIndex = 1,
+            [FromQuery] int pageSize = 10
             )
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.SearchTransactions(warehouseId, transactionType, startDate, endDate, pageIndex, pageSize);
+            if (response.Status)
+                return Ok(response.Data);
+
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpGet("{warehouseId}/transactions/{transactionId}")]
-        public IActionResult GetTransactionById([FromRoute] int warehouseId, [FromRoute] int transactionId)
+        public async Task<IActionResult> GetTransactionById([FromRoute] int warehouseId, [FromRoute] Guid transactionId)
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.GetTransactionById(warehouseId, transactionId);
+
+            if (response.Status)
+                return Ok(response.Data);
+
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpPost("{warehouseId}/transactions/sell")]
-        public IActionResult SellProduct([FromRoute] int warehouseId, [FromBody] SellProductModel sellProductModel)
+        public async Task<IActionResult> SellProduct([FromRoute] int warehouseId, [FromQuery] int productId, [FromQuery] int quantity, [FromQuery] Guid customerId)
         {
-            throw new NotImplementedException();
+            var result = await _productService.SellProduct(warehouseId, productId, quantity, customerId);
+
+            if (result.Status)
+                return Ok(new { status = result.Status, message = result.Message });
+
+            return BadRequest(new { status = result.Status, message = result.Message });
+
         }
 
         [HttpPost("{warehouseId}/transactions/purchase")]
-        public IActionResult PurchaseProduct([FromRoute] int warehouseId, [FromBody] PurchaseProductModel purchaseProductModel)
+        public IActionResult PurchaseProduct([FromRoute] int warehouseId, [FromQuery] int productId, [FromQuery] int quantity)
         {
             throw new NotImplementedException();
         }

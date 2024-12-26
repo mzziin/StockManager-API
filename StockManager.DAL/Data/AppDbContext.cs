@@ -49,6 +49,18 @@ namespace StockManager.DAL.Data
             builder.Entity<IdentityUserRole<string>>(opt => { opt.ToTable(name: "UserRoles", schema: "Identity"); });
             builder.Entity<IdentityUserToken<string>>(opt => { opt.ToTable(name: "UserTokens", schema: "Identity"); });
 
+            builder.Entity<ProductSale>().HasKey(ps => new { ps.ProductId, ps.SaleId });
+
+            // Define relationship with Product
+            builder.Entity<ProductSale>().HasOne(ps => ps.Product)
+                  .WithMany(p => p.ProductSales)
+                  .HasForeignKey(ps => ps.ProductId);
+
+            // Define relationship with Sale
+            builder.Entity<ProductSale>().HasOne(ps => ps.Sale)
+                  .WithMany(s => s.ProductSales)
+                  .HasForeignKey(ps => ps.SaleId);
+
             builder.Entity<Warehouse>()
             .Property(e => e.CreatedDateTime)
             .HasDefaultValueSql("GETDATE()")  // SQL function to set the default date as current date

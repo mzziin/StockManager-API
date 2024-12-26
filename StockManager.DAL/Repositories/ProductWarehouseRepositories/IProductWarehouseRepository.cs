@@ -11,5 +11,9 @@ namespace StockManager.DAL.Repositories.ProductWarehouseRepositories
             int pageIndex,
             int pageSize
             );
+        Task<Product?> GetProductFromWarehouse(int productId, int warehouseId);
+        Task<bool> IncrementProductQuantity(int productId, int warehouseId, int quantity);
+        Task<bool> DecrementProductQuantity(int productId, int warehouseId, int quantity);
+        Task<int> GetStockAsync(int productId, int warehouseId);
     }
 }

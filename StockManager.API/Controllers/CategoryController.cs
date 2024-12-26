@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StockManager.BLL.Services.CategoryService;
+using StockManager.BLL.Services.CategoryServices;
 
 namespace StockManager.API.Controllers
 {

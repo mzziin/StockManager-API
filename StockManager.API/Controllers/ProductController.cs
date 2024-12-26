@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs.Product;
-using StockManager.BLL.Services.ProductService;
+using StockManager.BLL.Services.ProductServices;
 
 namespace StockManager.API.Controllers
 {

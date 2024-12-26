@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Category;
-using StockManager.BLL.Services.CategoryService;
+using StockManager.BLL.Services.CategoryServices;
 
 namespace StockManager.API.Controllers
 {

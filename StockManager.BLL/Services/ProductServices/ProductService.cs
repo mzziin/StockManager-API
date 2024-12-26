@@ -3,7 +3,7 @@ using StockManager.BLL.DTOs.Product;
 using StockManager.DAL.Entities;
 using StockManager.DAL.Repositories;
 
-namespace StockManager.BLL.Services.ProductService
+namespace StockManager.BLL.Services.ProductServices
 {
     public class ProductService : IProductService
     {
@@ -289,7 +289,7 @@ namespace StockManager.BLL.Services.ProductService
             }
         }
 
-        public async Task<ResponseModel<object>> BuyProduct(int productId, int warehouseId, int quantity, Guid supplierId)
+        public async Task<ResponseModel<object>> PurchaseProduct(int productId, int warehouseId, int quantity, Guid supplierId)
         {
             // Check if the product exists in the database
             var product = await _unitOfWork.Products.GetByIdAsync(productId);

@@ -2,7 +2,7 @@
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Product;
 
-namespace StockManager.BLL.Services.WarehouseService
+namespace StockManager.BLL.Services.WarehouseServices
 {
     public interface IWarehouseService
     {

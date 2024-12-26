@@ -3,7 +3,7 @@ using StockManager.BLL.DTOs.Category;
 using StockManager.DAL.Entities;
 using StockManager.DAL.Repositories;
 
-namespace StockManager.BLL.Services.CategoryService
+namespace StockManager.BLL.Services.CategoryServices
 {
     public class CategoryService : ICategoryService
     {

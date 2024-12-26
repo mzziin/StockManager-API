@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StockManager.BLL.Services.AuthServices;
-using StockManager.BLL.Services.CategoryService;
-using StockManager.BLL.Services.ProductService;
-using StockManager.BLL.Services.WarehouseService;
+using StockManager.BLL.Services.CategoryServices;
+using StockManager.BLL.Services.ProductServices;
+using StockManager.BLL.Services.WarehouseServices;
 namespace StockManager.BLL
 {
     public class BLLDependencies

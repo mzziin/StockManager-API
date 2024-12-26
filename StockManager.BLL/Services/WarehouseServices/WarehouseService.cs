@@ -3,7 +3,7 @@ using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Product;
 using StockManager.DAL.Repositories;
 
-namespace StockManager.BLL.Services.WarehouseService
+namespace StockManager.BLL.Services.WarehouseServices
 {
     public class WarehouseService : IWarehouseService
     {

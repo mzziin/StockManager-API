@@ -1,7 +1,7 @@
 ﻿using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs.Category;
 
-namespace StockManager.BLL.Services.CategoryService
+namespace StockManager.BLL.Services.CategoryServices
 {
     public interface ICategoryService
     {

@@ -1,7 +1,7 @@
 ﻿using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs.Product;
 
-namespace StockManager.BLL.Services.ProductService
+namespace StockManager.BLL.Services.ProductServices
 {
     public interface IProductService
     {
@@ -11,5 +11,6 @@ namespace StockManager.BLL.Services.ProductService
         Task<ResponseModel<outProductDto>> GetProductById(int productId);
         Task<ResponseModel<outProductDto>> UpdateProduct(int productId, editProductDto editProductDto);
         Task<ResponseModel<object>> SellProduct(int productId, int warehouseId, int quantity, Guid customerId);
+        Task<ResponseModel<object>> PurchaseProduct(int productId, int warehouseId, int quantity, Guid supplierId);
     }
 }

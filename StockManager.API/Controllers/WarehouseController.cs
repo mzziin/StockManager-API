@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StockManager.BLL.Services.ProductService;
-using StockManager.BLL.Services.WarehouseService;
+using StockManager.BLL.Services.ProductServices;
+using StockManager.BLL.Services.WarehouseServices;
 
 namespace StockManager.API.Controllers
 {
@@ -59,9 +59,14 @@ namespace StockManager.API.Controllers
         }
 
         [HttpPost("{warehouseId}/transactions/purchase")]
-        public IActionResult PurchaseProduct([FromRoute] int warehouseId, [FromQuery] int productId, [FromQuery] int quantity)
+        public async Task<IActionResult> PurchaseProduct([FromRoute] int warehouseId, [FromQuery] int productId, [FromQuery] int quantity, [FromQuery] Guid supplierId)
         {
-            throw new NotImplementedException();
+            var result = await _productService.PurchaseProduct(warehouseId, productId, quantity, supplierId);
+
+            if (result.Status)
+                return Ok(new { status = result.Status, message = result.Message });
+
+            return BadRequest(new { status = result.Status, message = result.Message });
         }
 
         [HttpGet("{warehouseId}/products")]

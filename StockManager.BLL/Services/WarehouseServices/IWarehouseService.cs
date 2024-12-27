@@ -1,11 +1,17 @@
 ﻿using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Product;
+using StockManager.BLL.DTOs.Warehouse;
 
 namespace StockManager.BLL.Services.WarehouseServices
 {
     public interface IWarehouseService
     {
+        Task<ResponseModel<List<outWarehouseDto>>> GetAllWarehouses();
+        Task<ResponseModel<outWarehouseDto>> GetWarehouseById(int warehouseId);
+        Task<ResponseModel<object>> CreateWarehouse(addWarehouseDto addWarehouseDto);
+        Task<ResponseModel<object>> UpdateWarehouse(int warehouseId, editWarehouseDto editWarehouseDto);
+        Task<ResponseModel<object>> DeleteWarehouse(int warehouseId);
         Task<ResponseModel<List<outProductDto>>> GetAllProductsFromWarehouse(
             int warehouseId,
             int? subcategoryId,

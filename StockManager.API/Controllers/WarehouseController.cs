@@ -19,7 +19,7 @@ namespace StockManager.API.Controllers
 
 
         [HttpGet("{warehouseId}/transactions")]
-        public async Task<IActionResult> GetTransactions(
+        public async Task<IActionResult> GetAllTransactions(
             [FromRoute] int warehouseId,
             [FromQuery] string transactionType,
             [FromQuery] string startDate,
@@ -70,7 +70,7 @@ namespace StockManager.API.Controllers
         }
 
         [HttpGet("{warehouseId}/products")]
-        public async Task<IActionResult> GetProducts(
+        public async Task<IActionResult> GetAllProducts(
             [FromRoute] int warehouseId,
             [FromQuery] int? subcategoryId,
             [FromQuery] string productName,

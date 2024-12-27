@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Category;
+using StockManager.BLL.DTOs.Warehouse;
 using StockManager.BLL.Services.CategoryServices;
+using StockManager.BLL.Services.WarehouseServices;
 
 namespace StockManager.API.Controllers
 {
@@ -10,9 +12,11 @@ namespace StockManager.API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        public AdminController(ICategoryService categoryService)
+        private readonly IWarehouseService _warehouseService;
+        public AdminController(ICategoryService categoryService, IWarehouseService warehouseService)
         {
             _categoryService = categoryService;
+            _warehouseService = warehouseService;
         }
 
         // customer related endpoints
@@ -82,33 +86,53 @@ namespace StockManager.API.Controllers
         // Warehouse related endpoints
 
         [HttpGet("warehouses")]
-        public IActionResult GetAllWarehouses()
+        public async Task<IActionResult> GetAllWarehouses()
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.GetAllWarehouses();
+
+            if (response.Status)
+                return Ok(response.Data);
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpGet("warehouses/{warehouseId}")]
-        public IActionResult GetWarehouseById([FromRoute] int warehouseId)
+        public async Task<IActionResult> GetWarehouseById([FromRoute] int warehouseId)
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.GetWarehouseById(warehouseId);
+
+            if (response.Status)
+                return Ok(response.Data);
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpPost("warehouses")]
-        public IActionResult CreateWarehouse([FromBody] WarehouseDto warehouseDto)
+        public async Task<IActionResult> CreateWarehouse([FromBody] addWarehouseDto addWarehouseDto)
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.CreateWarehouse(addWarehouseDto);
+
+            if (response.Status)
+                return Ok(response.Data);
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpPut("warehouses/{warehouseId}")]
-        public IActionResult UpdateWarehouse([FromRoute] int warehouseId, [FromBody] WarehouseDto warehouseDto)
+        public async Task<IActionResult> UpdateWarehouse([FromRoute] int warehouseId, [FromBody] editWarehouseDto warehouseDto)
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.UpdateWarehouse(warehouseId, warehouseDto);
+
+            if (response.Status)
+                return Ok(response.Data);
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpDelete("warehouses/{warehouseId}")]
         public IActionResult DeleteWarehouse([FromRoute] int warehouseId)
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.DeleteWarehouse(warehouseId);
+
+            if (response.Status)
+                return Ok(response.Data);
+            return NotFound(new { status = response.Status, message = response.Message });
         }
 
         [HttpPost("warehouses/{warehouseId}/assign-manager")]

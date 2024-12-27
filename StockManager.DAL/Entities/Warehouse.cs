@@ -17,7 +17,7 @@ namespace StockManager.DAL.Entities
         [MaxLength(256)]
         public required string WarehouseLocation { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public DateTime UpdatedDateTime { get; set; }
+        public DateTime UpdatedDateTime { get; set; } = DateTime.Now;
         public bool IsActive { get; set; } = true;
 
         //todo

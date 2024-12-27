@@ -1,6 +1,8 @@
 ﻿using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Product;
+using StockManager.BLL.DTOs.Warehouse;
+using StockManager.DAL.Entities;
 using StockManager.DAL.Repositories;
 
 namespace StockManager.BLL.Services.WarehouseServices
@@ -27,7 +29,7 @@ namespace StockManager.BLL.Services.WarehouseServices
                 pageIndex,
                 pageSize
                 );
-            if (response == null)
+            if (response is null)
             {
                 return new ResponseModel<List<outProductDto>>
                 {
@@ -64,7 +66,7 @@ namespace StockManager.BLL.Services.WarehouseServices
 
             var result = await _unitOfWork.Transactions.GetAllTransactions(warehouseId, transactionType, startDate, endDate, pageIndex, pageSize);
 
-            if (result == null)
+            if (result is null)
                 return new ResponseModel<List<outTransaction>>
                 {
                     Status = false,
@@ -87,7 +89,7 @@ namespace StockManager.BLL.Services.WarehouseServices
         public async Task<ResponseModel<outTransaction>> GetTransactionById(int warehouseId, Guid transactionId)
         {
             var result = await _unitOfWork.Transactions.GetByExpressionAsync(t => t.TransactionId == transactionId && t.WarehouseId == warehouseId);
-            if (result == null)
+            if (result is null)
                 return new ResponseModel<outTransaction>
                 {
                     Status = false,
@@ -104,6 +106,127 @@ namespace StockManager.BLL.Services.WarehouseServices
                     TransactionType = result.TransactionType,
                     TransactionDateTime = result.TransactionDateTime
                 }
+            };
+        }
+
+        public async Task<ResponseModel<List<outWarehouseDto>>> GetAllWarehouses()
+        {
+            var result = await _unitOfWork.Warehouses.GetAllAsync();
+            if (result is null)
+                return new ResponseModel<List<outWarehouseDto>>
+                {
+                    Status = false,
+                    Message = "No warehouses found"
+                };
+            return new ResponseModel<List<outWarehouseDto>>
+            {
+                Status = true,
+                Data = result.Select(w => new outWarehouseDto
+                {
+                    WarehouseName = w.WarehouseName,
+                    WarehouseLocation = w.WarehouseLocation,
+                    WarehouseId = w.WarehouseId,
+                    CreatedDateTime = w.CreatedDateTime,
+                    IsActive = w.IsActive,
+                    UpdatedDateTime = w.UpdatedDateTime
+                }).ToList()
+            };
+        }
+
+        public async Task<ResponseModel<outWarehouseDto>> GetWarehouseById(int warehouseId)
+        {
+            var result = await _unitOfWork.Warehouses.GetByIdAsync(warehouseId);
+            if (result is null)
+                return new ResponseModel<outWarehouseDto>
+                {
+                    Status = false,
+                    Message = "Warehouse not found"
+                };
+            return new ResponseModel<outWarehouseDto>
+            {
+                Status = true,
+                Data = new outWarehouseDto
+                {
+                    WarehouseName = result.WarehouseName,
+                    WarehouseLocation = result.WarehouseLocation,
+                    WarehouseId = result.WarehouseId,
+                    CreatedDateTime = result.CreatedDateTime,
+                    IsActive = result.IsActive,
+                    UpdatedDateTime = result.UpdatedDateTime
+                }
+            };
+        }
+
+        public async Task<ResponseModel<object>> CreateWarehouse(addWarehouseDto addWarehouseDto)
+        {
+            var result = await _unitOfWork.Warehouses.InsertAsync(new Warehouse
+            {
+                WarehouseName = addWarehouseDto.WarehouseName,
+                WarehouseLocation = addWarehouseDto.WarehouseLocation,
+                CreatedDateTime = DateTime.Now
+            });
+            await _unitOfWork.SaveAsync();
+
+            if (result is false)
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = "Warehouse not found"
+                };
+            return new ResponseModel<object>
+            {
+                Status = true,
+                Message = "Warehouse added successfully"
+            };
+        }
+
+        public async Task<ResponseModel<object>> UpdateWarehouse(int warehouseId, editWarehouseDto editWarehouseDto)
+        {
+            var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(warehouseId);
+            if (warehouse is null)
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = "warehouse not found"
+                };
+
+            warehouse.WarehouseName = string.IsNullOrEmpty(editWarehouseDto.WarehouseName) ? warehouse.WarehouseName : editWarehouseDto.WarehouseName;
+            warehouse.WarehouseLocation = string.IsNullOrEmpty(editWarehouseDto.WarehouseLocation) ? warehouse.WarehouseLocation : editWarehouseDto.WarehouseLocation;
+            warehouse.UpdatedDateTime = DateTime.Now;
+
+            bool result = _unitOfWork.Warehouses.Update(warehouse);
+            await _unitOfWork.SaveAsync();
+
+            if (!result)
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = "Something went wrong"
+                };
+
+            return new ResponseModel<object>
+            {
+                Status = true,
+                Message = "warehouse updated successfully"
+            };
+        }
+
+        public async Task<ResponseModel<object>> DeleteWarehouse(int warehouseId)
+        {
+            var result = await _unitOfWork.Warehouses.Delete(warehouseId);
+            await _unitOfWork.SaveAsync();
+
+            if (!result)
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = "Something went wrong"
+                };
+
+            return new ResponseModel<object>
+            {
+                Status = true,
+                Message = "warehouse deleted successfully"
             };
         }
     }

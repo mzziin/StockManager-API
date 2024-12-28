@@ -10,9 +10,4 @@
     <ProjectReference Include="..\StockManager.DAL\StockManager.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\CustomerService\" />
-    <Folder Include="Services\SupplierService\" />
-  </ItemGroup>
-
 </Project>

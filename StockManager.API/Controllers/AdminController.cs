@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Category;
+using StockManager.BLL.DTOs.Customer;
+using StockManager.BLL.DTOs.Supplier;
 using StockManager.BLL.DTOs.Warehouse;
 using StockManager.BLL.Services.CategoryServices;
+using StockManager.BLL.Services.CustomerService;
+using StockManager.BLL.Services.SupplierService;
 using StockManager.BLL.Services.WarehouseServices;
 
 namespace StockManager.API.Controllers
@@ -13,74 +16,129 @@ namespace StockManager.API.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly IWarehouseService _warehouseService;
-        public AdminController(ICategoryService categoryService, IWarehouseService warehouseService)
+        private readonly ICustomerService _customerService;
+        private readonly ISupplierService _supplierService;
+        public AdminController(
+            ICategoryService categoryService,
+            IWarehouseService warehouseService,
+            ICustomerService customerService,
+            ISupplierService supplierService)
         {
             _categoryService = categoryService;
             _warehouseService = warehouseService;
+            _customerService = customerService;
+            _supplierService = supplierService;
         }
 
         // customer related endpoints
 
         [HttpGet("customers")]
-        public IActionResult GetAllCustomers()
+        public async Task<IActionResult> GetAllCustomers()
         {
-            throw new NotImplementedException();
+            var response = await _customerService.GetAllCustomers();
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", data = response.Data });
         }
 
         [HttpGet("customers/{customerId}")]
-        public IActionResult GetCustomer([FromRoute] int customerId)
+        public async Task<IActionResult> GetCustomer([FromRoute] Guid customerId)
         {
-            throw new NotImplementedException();
+            var response = await _customerService.GetCustomerById(customerId);
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", data = response.Data });
         }
 
         [HttpPost("customers")]
-        public IActionResult CreateCustomer([FromBody] CustomerDto customerDto)
+        public async Task<IActionResult> CreateCustomer([FromBody] addCustomerDto customerDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(customerDto);
+
+            var response = await _customerService.CreateCustomer(customerDto);
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", data = response.Data });
         }
 
         [HttpPut("customer/{customerId}")]
-        public IActionResult UpdateCustomer([FromRoute] int customerId, [FromBody] CustomerDto customerDto)
+        public async Task<IActionResult> UpdateCustomer([FromRoute] Guid customerId, [FromBody] editCustomerDto customerDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(customerDto);
+
+            var response = await _customerService.UpdateCustomer(customerId, customerDto);
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success" });
         }
 
         [HttpDelete("customer/{customerId}")]
-        public IActionResult DeleteCustomer([FromRoute] int customerId, [FromBody] CustomerDto customerDto)
+        public async Task<IActionResult> DeleteCustomer([FromRoute] Guid customerId)
         {
-            throw new NotImplementedException();
+            var response = await _customerService.DeleteCustomer(customerId);
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return NoContent();
         }
 
         // supplier related endpoints
 
         [HttpGet("suppliers")]
-        public IActionResult GetAllSupliers()
+        public async Task<IActionResult> GetAllSupliers()
         {
-            throw new NotImplementedException();
+            var response = await _supplierService.GetAllSuppliers();
+
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", data = response.Data });
         }
 
         [HttpGet("suppliers/{supplierId}")]
-        public IActionResult GetSupplier([FromRoute] int supplierId)
+        public async Task<IActionResult> GetSupplier([FromRoute] Guid supplierId)
         {
-            throw new NotImplementedException();
+            var response = await _supplierService.GetSupplierById(supplierId);
+
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", data = response.Data });
         }
 
         [HttpPost("supplier")]
-        public IActionResult CreateSupplier([FromBody] SupplierDto supplierDto)
+        public async Task<IActionResult> CreateSupplier([FromBody] addSupplierDto supplierDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(supplierDto);
+
+            var response = await _supplierService.CreateSupplier(supplierDto);
+
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", message = response.Message });
         }
 
         [HttpPut("supplier/{supplierId}")]
-        public IActionResult UpdateSupplier([FromRoute] int supplierId, [FromBody] SupplierDto supplierDto)
+        public async Task<IActionResult> UpdateSupplier([FromRoute] Guid supplierId, [FromBody] editSupplierDto supplierDto)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(supplierDto);
+
+            var response = await _supplierService.UpdateSupplier(supplierId, supplierDto);
+
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", message = response.Message });
         }
 
-        [HttpDelete("supplier/{customerId}")]
-        public IActionResult DeleteSupplier([FromRoute] int customerId, [FromBody] CustomerDto customerDto)
+        [HttpDelete("supplier/{supplierId}")]
+        public async Task<IActionResult> DeleteSupplier([FromRoute] Guid supplierId)
         {
-            throw new NotImplementedException();
+            var response = await _supplierService.DeleteSupplier(supplierId);
+
+            if (!response.Status)
+                return BadRequest(new { status = "fail", message = response.Message });
+            return Ok(new { status = "success", message = response.Message });
         }
 
         // Warehouse related endpoints
@@ -126,7 +184,7 @@ namespace StockManager.API.Controllers
         }
 
         [HttpDelete("warehouses/{warehouseId}")]
-        public IActionResult DeleteWarehouse([FromRoute] int warehouseId)
+        public async Task<IActionResult> DeleteWarehouse([FromRoute] int warehouseId)
         {
             var response = await _warehouseService.DeleteWarehouse(warehouseId);
 

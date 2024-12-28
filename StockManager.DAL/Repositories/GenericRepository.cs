@@ -20,6 +20,7 @@ namespace StockManager.DAL.Repositories
         public async Task<IEnumerable<T>> GetAllAsync() => await _db.ToListAsync();
 
         public async Task<T?> GetByIdAsync(int id) => await _db.FindAsync(id);
+        public async Task<T?> GetByIdAsync(Guid id) => await _db.FindAsync(id);
 
         public async Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression) => await _db.FirstOrDefaultAsync(expression);
 
@@ -47,6 +48,17 @@ namespace StockManager.DAL.Repositories
         }
 
         public async Task<bool> Delete(int id)
+        {
+            var entity = await _db.FindAsync(id);
+            if (entity != null)
+            {
+                _db.Remove(entity);
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> Delete(Guid id)
         {
             var entity = await _db.FindAsync(id);
             if (entity != null)

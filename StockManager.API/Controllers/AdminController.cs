@@ -194,9 +194,13 @@ namespace StockManager.API.Controllers
         }
 
         [HttpPost("warehouses/{warehouseId}/assign-manager")]
-        public IActionResult AssignManagerToWarehouse([FromRoute] int warehouseId, [FromQuery] int userId)
+        public async Task<IActionResult> AssignManagerToWarehouse([FromRoute] int warehouseId, [FromQuery] Guid userId)
         {
-            throw new NotImplementedException();
+            var response = await _warehouseService.AssignManager(warehouseId, userId);
+
+            if (response.Status)
+                return Ok(new { result = "success", message = response.Message });
+            return StatusCode(500, new { result = "fail", message = response.Message });
         }
 
         // Categories related endpoints

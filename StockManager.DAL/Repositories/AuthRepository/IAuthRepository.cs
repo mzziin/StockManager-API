@@ -4,12 +4,13 @@ namespace StockManager.DAL.Repositories.AuthRepository
 {
     public interface IAuthRepository
     {
-        public Task<IdentityUser?> GetUserByUserName(string userName);
-        public Task<IdentityUser?> GetUserByEmail(string email);
-        public Task<bool> CheckPassword(IdentityUser user, string password);
-        public Task<IList<string>> GetUserRoles(IdentityUser user);
-        public Task<bool> CreateUser(IdentityUser user, string password);
-        public Task<bool> DeleteUser(IdentityUser user);
-        public Task<bool> AddRoleToUser(IdentityUser user, string role);
+        Task<IdentityUser?> GetUserById(Guid id);
+        Task<IdentityUser?> GetUserByUserName(string userName);
+        Task<IdentityUser?> GetUserByEmail(string email);
+        Task<bool> CheckPassword(IdentityUser user, string password);
+        Task<IList<string>> GetUserRoles(IdentityUser user);
+        Task<bool> CreateUser(IdentityUser user, string password);
+        Task<bool> DeleteUser(IdentityUser user);
+        Task<bool> AddRoleToUser(IdentityUser user, string role);
     }
 }

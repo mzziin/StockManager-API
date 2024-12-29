@@ -41,6 +41,12 @@ namespace StockManager.DAL.Repositories.AuthRepository
             return result.Succeeded;
         }
 
+        public async Task<IdentityUser?> GetUserById(Guid id)
+        {
+            return await _userManager.FindByIdAsync(id.ToString());
+        }
+
+
         public async Task<IdentityUser?> GetUserByEmail(string email)
         {
             return await _userManager.FindByEmailAsync(email);

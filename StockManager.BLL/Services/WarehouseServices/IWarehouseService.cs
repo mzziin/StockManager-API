@@ -29,5 +29,6 @@ namespace StockManager.BLL.Services.WarehouseServices
             );
 
         Task<ResponseModel<outTransaction>> GetTransactionById(int warehouseId, Guid transactionId);
+        Task<ResponseModel<object>> AssignManager(int warehouseId, Guid userId);
     }
 }

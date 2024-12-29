@@ -4,14 +4,17 @@ using StockManager.BLL.DTOs.Product;
 using StockManager.BLL.DTOs.Warehouse;
 using StockManager.DAL.Entities;
 using StockManager.DAL.Repositories;
+using StockManager.DAL.Repositories.AuthRepository;
 
 namespace StockManager.BLL.Services.WarehouseServices
 {
     public class WarehouseService : IWarehouseService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public WarehouseService(IUnitOfWork unitOfWork)
+        private readonly IAuthRepository _authRepository;
+        public WarehouseService(IUnitOfWork unitOfWork, IAuthRepository authRepository)
         {
+            _authRepository = authRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -228,6 +231,70 @@ namespace StockManager.BLL.Services.WarehouseServices
                 Status = true,
                 Message = "warehouse deleted successfully"
             };
+        }
+
+        public async Task<ResponseModel<object>> AssignManager(int warehouseId, Guid userId)
+        {
+            // Fetch warehouse and user entities
+            var warehouse = await _unitOfWork.Warehouses.GetByIdAsync(warehouseId);
+            if (warehouse is null)
+            {
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = $"No warehouse found with ID {warehouseId}"
+                };
+            }
+
+            var user = await _authRepository.GetUserById(userId);
+            if (user is null)
+            {
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = $"No user found with ID {userId}"
+                };
+            }
+
+            //begin transaction
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                // Assign manager and update warehouse
+                warehouse.WarehouseManager = user;
+                _unitOfWork.Warehouses.Update(warehouse);
+
+                // Assign role to the user
+                var roleAssigned = await _authRepository.AddRoleToUser(user, "warehouse manager");
+                if (!roleAssigned)
+                {
+                    await _unitOfWork.RollBack();
+                    return new ResponseModel<object>
+                    {
+                        Status = false,
+                        Message = $"Failed to assign role 'warehouse manager' to user {user.UserName}"
+                    };
+                }
+
+                await _unitOfWork.CommitAsync();
+
+                return new ResponseModel<object>
+                {
+                    Status = true,
+                    Message = $"{user.UserName} is assigned as the warehouse manager of {warehouse.WarehouseName}"
+                };
+            }
+            catch (Exception ex)
+            {
+                // Rollback on exception
+                await _unitOfWork.RollBack();
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = $"something went wrong: {ex.Message}"
+                };
+            }
+
         }
     }
 }

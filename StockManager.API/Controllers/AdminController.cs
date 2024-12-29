@@ -219,39 +219,68 @@ namespace StockManager.API.Controllers
         }
 
         [HttpPut("categories/{categoryId}")]
-        public IActionResult UpdateCategory([FromBody] CategoryDto categoryDto, [FromRoute] int categoryId)
+        public async Task<IActionResult> UpdateCategory([FromBody] CategoryDto categoryDto, [FromRoute] int categoryId)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(categoryDto);
+
+            var response = await _categoryService.UpdateCategory(categoryId, categoryDto);
+
+            if (response.Status)
+                return Ok(new { result = "success" });
+            return StatusCode(500, new { result = "fail", message = response.Message });
         }
 
         [HttpDelete("categories/{categoryId}")]
-        public IActionResult DeleteCategory([FromRoute] int categoryId)
+        public async Task<IActionResult> DeleteCategory([FromRoute] int categoryId)
         {
-            throw new NotImplementedException();
+            var response = await _categoryService.DeleteCategory(categoryId);
+
+            if (response.Status)
+                return NoContent();
+            return StatusCode(500, new { result = "fail", message = response.Message });
         }
 
         // Subcategories related endpoints
 
-        [HttpPost("categories/{categoryId}/subcategories")]
-        public IActionResult CreateSubcategory([FromBody] SubcategoryDto subcategoryDto, [FromRoute] int categoryId)
+        [HttpPost("subcategories")]
+        public async Task<IActionResult> CreateSubcategory([FromBody] SubcategoryDto subcategoryDto, [FromQuery] int categoryId)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(subcategoryDto);
+
+            var response = await _categoryService.AddSubcategory(subcategoryDto, categoryId);
+
+            if (response.Status)
+                return Ok(new { result = "success" });
+            return StatusCode(500, new { result = "fail", message = response.Message });
+
         }
 
-        [HttpPut("categories/{categoryId}/subcategories/{subcategoryId}")]
-        public IActionResult UpdateSubcategory(
+        [HttpPut("subcategories/{subcategoryId}")]
+        public async Task<IActionResult> UpdateSubcategory(
             [FromBody] SubcategoryDto subcategoryDto,
-            [FromRoute] int categoryId,
             [FromRoute] int subcategoryId
             )
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+                return BadRequest(subcategoryDto);
+
+            var response = await _categoryService.UpdateSubcategory(subcategoryId, subcategoryDto);
+
+            if (response.Status)
+                return Ok(new { result = "success" });
+            return StatusCode(500, new { result = "fail", message = response.Message });
         }
 
-        [HttpDelete("categories/{categoryId}/subcategories/{subcategoryId}")]
-        public IActionResult DeleteSubcategory([FromRoute] int categoryId, [FromRoute] int subcategoryId)
+        [HttpDelete("subcategories/{subcategoryId}")]
+        public async Task<IActionResult> DeleteSubcategory([FromRoute] int subcategoryId)
         {
-            throw new NotImplementedException();
+            var response = await _categoryService.DeleteSubcategory(subcategoryId);
+
+            if (response.Status)
+                return NoContent();
+            return StatusCode(500, new { result = "fail", message = response.Message });
         }
     }
 }

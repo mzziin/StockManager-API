@@ -6,6 +6,7 @@ namespace StockManager.BLL.DTOs.Category
     {
 
         [Required]
+        [MaxLength(100)]
         public required string CategoryName { get; set; }
     }
 }

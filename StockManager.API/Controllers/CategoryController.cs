@@ -35,7 +35,7 @@ namespace StockManager.API.Controllers
         [HttpGet("{categoryId}/subcategories")]
         public async Task<IActionResult> GetAllSubcategories([FromRoute] int categoryId)
         {
-            var response = await _categoryService.GetAllSubCategories(categoryId);
+            var response = await _categoryService.GetAllSubcategories(categoryId);
             if (response.Status)
             {
                 return Ok(new

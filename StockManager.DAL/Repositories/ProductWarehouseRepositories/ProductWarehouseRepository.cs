@@ -41,7 +41,6 @@ namespace StockManager.DAL.Repositories.ProductWarehouseRepositories
         public async Task<Product?> GetProductFromWarehouse(int productId, int warehouseId)
         {
             return await _productWarehouse
-                .AsNoTracking()
                 .Where(p => p.ProductId == productId && p.WarehouseId == warehouseId)
                 .Select(p => p.Product)
                 .FirstOrDefaultAsync();
@@ -50,7 +49,6 @@ namespace StockManager.DAL.Repositories.ProductWarehouseRepositories
         public async Task<int> GetStockAsync(int productId, int warehouseId)
         {
             return await _productWarehouse
-                .AsNoTracking()
                 .Where(p => p.ProductId == productId && p.WarehouseId == warehouseId)
                 .Select(p => p.StockQuantity)
                 .FirstOrDefaultAsync();

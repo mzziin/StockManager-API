@@ -18,48 +18,20 @@ namespace StockManager.DAL.Repositories.AuthRepository
             _configuration = configuration;
         }
 
-        public async Task<bool> AddRoleToUser(IdentityUser user, string role)
-        {
-            var result = await _userManager.AddToRoleAsync(user, role);
-            return result.Succeeded;
-        }
+        public async Task<bool> AddRoleToUser(IdentityUser user, string role) => (await _userManager.AddToRoleAsync(user, role)).Succeeded;
 
-        public async Task<bool> CheckPassword(IdentityUser user, string password)
-        {
-            return await _userManager.CheckPasswordAsync(user, password);
-        }
+        public async Task<bool> CheckPassword(IdentityUser user, string password) => await _userManager.CheckPasswordAsync(user, password);
 
-        public async Task<bool> CreateUser(IdentityUser user, string password)
-        {
-            var result = await _userManager.CreateAsync(user, password);
-            return result.Succeeded;
-        }
+        public async Task<bool> CreateUser(IdentityUser user, string password) => (await _userManager.CreateAsync(user, password)).Succeeded;
 
-        public async Task<bool> DeleteUser(IdentityUser user)
-        {
-            var result = await _userManager.DeleteAsync(user);
-            return result.Succeeded;
-        }
+        public async Task<bool> DeleteUser(IdentityUser user) => (await _userManager.DeleteAsync(user)).Succeeded;
 
-        public async Task<IdentityUser?> GetUserById(Guid id)
-        {
-            return await _userManager.FindByIdAsync(id.ToString());
-        }
+        public async Task<IdentityUser?> GetUserById(Guid id) => await _userManager.FindByIdAsync(id.ToString());
 
+        public async Task<IdentityUser?> GetUserByEmail(string email) => await _userManager.FindByEmailAsync(email);
 
-        public async Task<IdentityUser?> GetUserByEmail(string email)
-        {
-            return await _userManager.FindByEmailAsync(email);
-        }
+        public async Task<IdentityUser?> GetUserByUserName(string userName) => await _userManager.FindByNameAsync(userName);
 
-        public async Task<IdentityUser?> GetUserByUserName(string userName)
-        {
-            return await _userManager.FindByNameAsync(userName);
-        }
-
-        public async Task<IList<string>> GetUserRoles(IdentityUser user)
-        {
-            return await _userManager.GetRolesAsync(user);
-        }
+        public async Task<IList<string>> GetUserRoles(IdentityUser user) => await _userManager.GetRolesAsync(user);
     }
 }

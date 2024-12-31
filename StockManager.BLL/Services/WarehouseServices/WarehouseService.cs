@@ -1,4 +1,5 @@
-﻿using StockManager.BLL.ApiModels;
+﻿using Microsoft.EntityFrameworkCore;
+using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs;
 using StockManager.BLL.DTOs.Product;
 using StockManager.BLL.DTOs.Warehouse;
@@ -256,42 +257,42 @@ namespace StockManager.BLL.Services.WarehouseServices
                 };
             }
 
-            //begin transaction
-            await _unitOfWork.BeginTransactionAsync();
             try
             {
                 // Assign manager and update warehouse
-                warehouse.WarehouseManager = user;
-                _unitOfWork.Warehouses.Update(warehouse);
+                warehouse.WarehouseManagerId = user.Id;
+                var status = _unitOfWork.Warehouses.Update(warehouse);
 
-                // Assign role to the user
-                var roleAssigned = await _authRepository.AddRoleToUser(user, "warehouse manager");
-                if (!roleAssigned)
-                {
-                    await _unitOfWork.RollBack();
+                await _unitOfWork.SaveAsync();
+                if (status)
                     return new ResponseModel<object>
                     {
-                        Status = false,
-                        Message = $"Failed to assign role 'warehouse manager' to user {user.UserName}"
+                        Status = true,
+                        Message = $"{user.UserName} is assigned as the warehouse manager of {warehouse.WarehouseName}"
                     };
-                }
-
-                await _unitOfWork.CommitAsync();
-
                 return new ResponseModel<object>
                 {
-                    Status = true,
-                    Message = $"{user.UserName} is assigned as the warehouse manager of {warehouse.WarehouseName}"
+                    Status = false,
+                    Message = $"something went wrong: "
+                };
+
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Log and handle other database-related exceptions
+                return new ResponseModel<object>
+                {
+                    Status = false,
+                    Message = "A database error occurred. Please try again."
                 };
             }
             catch (Exception ex)
             {
-                // Rollback on exception
-                await _unitOfWork.RollBack();
+                // Handle generic exceptions
                 return new ResponseModel<object>
                 {
                     Status = false,
-                    Message = $"something went wrong: {ex.Message}"
+                    Message = $"An unexpected error occurred: {ex.Message}"
                 };
             }
 

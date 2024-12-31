@@ -7,5 +7,6 @@ namespace StockManager.BLL.Services.AuthServices
     {
         Task<ResponseModel<object>> RegisterUserOrAdmin(RegisterModel registerModel, string role);
         Task<ResponseModel<UserDto>> LoginUser(LoginModel loginModel);
+        Task<ResponseModel<object>> CheckIsValidManager(Guid userId, int warehouseId);
     }
 }

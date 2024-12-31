@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs.Product;
 using StockManager.BLL.Services.ProductServices;
 
 namespace StockManager.API.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/products")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -14,6 +16,7 @@ namespace StockManager.API.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
@@ -24,6 +27,7 @@ namespace StockManager.API.Controllers
             return Ok(response.Data);
         }
 
+        [AllowAnonymous]
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductById([FromRoute] int productId)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StockManager.BLL.DTOs.Category;
 using StockManager.BLL.DTOs.Customer;
 using StockManager.BLL.DTOs.Supplier;
@@ -10,6 +11,7 @@ using StockManager.BLL.Services.WarehouseServices;
 
 namespace StockManager.API.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/admin")]
     [ApiController]
     public class AdminController : ControllerBase

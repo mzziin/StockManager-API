@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using StockManager.BLL.ApiModels;
 using StockManager.BLL.DTOs;
+using StockManager.DAL.Repositories;
 using StockManager.DAL.Repositories.AuthRepository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,11 +15,30 @@ namespace StockManager.BLL.Services.AuthServices
     {
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
-        public AuthService(IAuthRepository authRepository, IConfiguration configurationManager)
+        private readonly IUnitOfWork _unitOfWork;
+        public AuthService(IAuthRepository authRepository, IConfiguration configurationManager, IUnitOfWork unitOfWork)
         {
             _authRepository = authRepository;
             _configuration = configurationManager;
+            _unitOfWork = unitOfWork;
         }
+
+        public async Task<ResponseModel<object>> CheckIsValidManager(Guid userId, int warehouseId)
+        {
+            var warehouse = await _unitOfWork.Warehouses.GetByExpressionAsync(e => e.WarehouseId == warehouseId && e.WarehouseManagerId == userId.ToString());
+            if (warehouse is null)
+                return new ResponseModel<object>()
+                {
+                    Status = false,
+                    Message = "You are not authorized"
+                };
+
+            return new ResponseModel<object>
+            {
+                Status = true,
+            };
+        }
+
         public async Task<ResponseModel<UserDto>> LoginUser(LoginModel loginModel)
         {
             var user = await _authRepository.GetUserByUserName(loginModel.Username);

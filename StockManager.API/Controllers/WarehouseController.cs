@@ -1,20 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using StockManager.BLL.Services.AuthServices;
 using StockManager.BLL.Services.ProductServices;
 using StockManager.BLL.Services.WarehouseServices;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace StockManager.API.Controllers
 {
+    [Authorize(Roles = "admin, warehouse manager")]
     [Route("api/warehouse")]
     [ApiController]
     public class WarehouseController : ControllerBase
     {
         private readonly IWarehouseService _warehouseService;
         private readonly IProductService _productService;
+        private readonly IAuthService _authService;
 
-        public WarehouseController(IWarehouseService warehouseService, IProductService productService)
+        public WarehouseController(IWarehouseService warehouseService, IProductService productService, IAuthService authService)
         {
             _warehouseService = warehouseService;
             _productService = productService;
+            _authService = authService;
         }
 
 
@@ -46,27 +53,46 @@ namespace StockManager.API.Controllers
             return NotFound(new { status = response.Status, message = response.Message });
         }
 
+        [Authorize(Roles = "warehouse manager")]
         [HttpPost("{warehouseId}/transactions/sell")]
         public async Task<IActionResult> SellProduct([FromRoute] int warehouseId, [FromQuery] int productId, [FromQuery] int quantity, [FromQuery] Guid customerId)
         {
-            var result = await _productService.SellProduct(warehouseId, productId, quantity, customerId);
+            string? userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if (userId == null)
+                return NotFound(new { status = "fail", message = "User not found" });
 
-            if (result.Status)
-                return Ok(new { status = result.Status, message = result.Message });
+            var isValidManager = await _authService.CheckIsValidManager(Guid.Parse(userId), warehouseId);
+            if (isValidManager.Status)
+            {
+                var result = await _productService.SellProduct(warehouseId, productId, quantity, customerId);
 
-            return BadRequest(new { status = result.Status, message = result.Message });
+                if (result.Status)
+                    return Ok(new { status = result.Status, message = result.Message });
 
+                return BadRequest(new { status = result.Status, message = result.Message });
+            }
+            return BadRequest(new { status = "fail", message = isValidManager.Message });
         }
 
+        [Authorize(Roles = "warehouse manager")]
         [HttpPost("{warehouseId}/transactions/purchase")]
         public async Task<IActionResult> PurchaseProduct([FromRoute] int warehouseId, [FromQuery] int productId, [FromQuery] int quantity, [FromQuery] Guid supplierId)
         {
-            var result = await _productService.PurchaseProduct(warehouseId, productId, quantity, supplierId);
+            string? userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if (userId == null)
+                return NotFound(new { status = "fail", message = "User not found" });
 
-            if (result.Status)
-                return Ok(new { status = result.Status, message = result.Message });
+            var isValidManager = await _authService.CheckIsValidManager(Guid.Parse(userId), warehouseId);
+            if (isValidManager.Status)
+            {
+                var result = await _productService.PurchaseProduct(warehouseId, productId, quantity, supplierId);
 
-            return BadRequest(new { status = result.Status, message = result.Message });
+                if (result.Status)
+                    return Ok(new { status = result.Status, message = result.Message });
+
+                return BadRequest(new { status = result.Status, message = result.Message });
+            }
+            return BadRequest(new { status = "fail", message = isValidManager.Message });
         }
 
         [HttpGet("{warehouseId}/products")]

@@ -2,8 +2,8 @@
 {
     public class editWarehouseDto
     {
-        public string WarehouseName { get; set; }
-        public string WarehouseLocation { get; set; }
+        public string? WarehouseName { get; set; }
+        public string? WarehouseLocation { get; set; }
         public DateTime UpdatedDateTime { get; set; } = DateTime.Now;
     }
 }

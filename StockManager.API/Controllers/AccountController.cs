@@ -34,7 +34,7 @@ namespace StockManager.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var response = await _authService.RegisterUserOrAdmin(registerModel, "User");
+            var response = await _authService.RegisterUserOrAdmin(registerModel, "warehouse manager");
 
             if (response.Status)
                 return Ok(new { status = "success", message = response.Message });
@@ -48,7 +48,7 @@ namespace StockManager.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var response = await _authService.RegisterUserOrAdmin(registerModel, "Admin");
+            var response = await _authService.RegisterUserOrAdmin(registerModel, "admin");
 
             if (response.Status)
                 return Ok(new { status = "success", message = response.Message });

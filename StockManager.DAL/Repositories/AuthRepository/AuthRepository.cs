@@ -18,7 +18,18 @@ namespace StockManager.DAL.Repositories.AuthRepository
             _configuration = configuration;
         }
 
-        public async Task<bool> AddRoleToUser(IdentityUser user, string role) => (await _userManager.AddToRoleAsync(user, role)).Succeeded;
+        public async Task<bool> AddRoleToUser(IdentityUser user, string role)
+        {
+            var result = await _userManager.AddToRoleAsync(user, role);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"Error Code: {error.Code}, Description: {error.Description}");
+                }
+            }
+            return result.Succeeded;
+        }
 
         public async Task<bool> CheckPassword(IdentityUser user, string password) => await _userManager.CheckPasswordAsync(user, password);
 

@@ -9,7 +9,7 @@ namespace StockManager.BLL.Services.WarehouseServices
     {
         Task<ResponseModel<List<outWarehouseDto>>> GetAllWarehouses();
         Task<ResponseModel<outWarehouseDto>> GetWarehouseById(int warehouseId);
-        Task<ResponseModel<object>> CreateWarehouse(addWarehouseDto addWarehouseDto);
+        Task<ResponseModel<outWarehouseDto>> CreateWarehouse(addWarehouseDto addWarehouseDto);
         Task<ResponseModel<object>> UpdateWarehouse(int warehouseId, editWarehouseDto editWarehouseDto);
         Task<ResponseModel<object>> DeleteWarehouse(int warehouseId);
         Task<ResponseModel<List<outProductDto>>> GetAllProductsFromWarehouse(

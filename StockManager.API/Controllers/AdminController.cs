@@ -117,7 +117,7 @@ namespace StockManager.API.Controllers
 
             if (!response.Status)
                 return BadRequest(new { status = "fail", message = response.Message });
-            return Ok(new { status = "success", message = response.Message });
+            return Ok(new { status = "success", data = response.Data });
         }
 
         [HttpPut("supplier/{supplierId}")]
@@ -216,7 +216,7 @@ namespace StockManager.API.Controllers
             var response = await _categoryService.AddCategory(categoryDto);
 
             if (response.Status)
-                return Ok(new { result = "success", data = categoryDto });
+                return Ok(new { result = "success", data = response.Data });
             return StatusCode(500, new { result = "fail", message = response.Message });
         }
 
@@ -254,7 +254,7 @@ namespace StockManager.API.Controllers
             var response = await _categoryService.AddSubcategory(subcategoryDto, categoryId);
 
             if (response.Status)
-                return Ok(new { result = "success" });
+                return Ok(new { result = "success", data = response.Data });
             return StatusCode(500, new { result = "fail", message = response.Message });
 
         }

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StockManager.BLL.Services.WarehouseServices;
 
 namespace StockManager.Tests.Services
 {
-    internal class WarehouseServiceTests
+    public class WarehouseServiceTests
     {
+        private readonly WarehouseService _warehouseService;
+        public WarehouseServiceTests()
+        {
+
+        }
     }
 }

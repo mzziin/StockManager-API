@@ -57,7 +57,7 @@ namespace StockManager.BLL.Services.CustomerService
             };
         }
 
-        public async Task<ResponseModel<object>> CreateCustomer(addCustomerDto addCustomerDto)
+        public async Task<ResponseModel<outCustomerDto>> CreateCustomer(addCustomerDto addCustomerDto)
         {
             var result = await _unitOfWork.Customers.InsertAsync(new Customer
             {
@@ -66,16 +66,22 @@ namespace StockManager.BLL.Services.CustomerService
             });
             await _unitOfWork.SaveAsync();
 
-            if (result is false)
-                return new ResponseModel<object>()
+            if (result is null)
+                return new ResponseModel<outCustomerDto>()
                 {
                     Status = false,
                     Message = "Somethong went wrong"
                 };
-            return new ResponseModel<object>()
+            return new ResponseModel<outCustomerDto>()
             {
                 Status = true,
-                Message = "Customer added successfully"
+                Message = "Customer added successfully",
+                Data = new outCustomerDto
+                {
+                    CustomerId = result.CustomerId,
+                    CustomerName = result.CustomerName,
+                    PhoneNumber = result.PhoneNumber
+                }
             };
         }
 

@@ -161,7 +161,7 @@ namespace StockManager.BLL.Services.WarehouseServices
             };
         }
 
-        public async Task<ResponseModel<object>> CreateWarehouse(addWarehouseDto addWarehouseDto)
+        public async Task<ResponseModel<outWarehouseDto>> CreateWarehouse(addWarehouseDto addWarehouseDto)
         {
             var result = await _unitOfWork.Warehouses.InsertAsync(new Warehouse
             {
@@ -171,16 +171,25 @@ namespace StockManager.BLL.Services.WarehouseServices
             });
             await _unitOfWork.SaveAsync();
 
-            if (result is false)
-                return new ResponseModel<object>
+            if (result == null)
+                return new ResponseModel<outWarehouseDto>
                 {
                     Status = false,
-                    Message = "Warehouse not found"
+                    Message = "Something went wrong"
                 };
-            return new ResponseModel<object>
+            return new ResponseModel<outWarehouseDto>
             {
                 Status = true,
-                Message = "Warehouse added successfully"
+                Message = "Warehouse added successfully",
+                Data = new outWarehouseDto
+                {
+                    WarehouseId = result.WarehouseId,
+                    WarehouseName = result.WarehouseName,
+                    WarehouseLocation = result.WarehouseLocation,
+                    CreatedDateTime = result.CreatedDateTime,
+                    IsActive = result.IsActive,
+                    UpdatedDateTime = result.UpdatedDateTime
+                }
             };
         }
 

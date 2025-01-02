@@ -57,7 +57,7 @@ namespace StockManager.BLL.Services.SupplierService
             };
         }
 
-        public async Task<ResponseModel<object>> CreateSupplier(addSupplierDto addSupplierDto)
+        public async Task<ResponseModel<outSupplierDto>> CreateSupplier(addSupplierDto addSupplierDto)
         {
             var result = await _unitOfWork.Suppliers.InsertAsync(new Supplier
             {
@@ -66,16 +66,22 @@ namespace StockManager.BLL.Services.SupplierService
             });
             await _unitOfWork.SaveAsync();
 
-            if (result is false)
-                return new ResponseModel<object>()
+            if (result is null)
+                return new ResponseModel<outSupplierDto>()
                 {
                     Status = false,
                     Message = "Somethong went wrong"
                 };
-            return new ResponseModel<object>()
+            return new ResponseModel<outSupplierDto>()
             {
                 Status = true,
-                Message = "Supplier added successfully"
+                Message = "Supplier added successfully",
+                Data = new outSupplierDto
+                {
+                    SupplierId = result.SupplierId,
+                    PhoneNumber = result.PhoneNumber,
+                    SupplierName = result.SupplierName
+                }
             };
         }
 

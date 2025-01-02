@@ -26,18 +26,10 @@ namespace StockManager.DAL.Repositories
 
         public async Task<IEnumerable<T>> GetAllByExpressionAsync(Expression<Func<T, bool>> expression) => await _db.AsNoTracking().Where(expression).ToListAsync();
 
-        public async Task<bool> InsertAsync(T entity)
+        public async Task<T> InsertAsync(T entity)
         {
-            try
-            {
-                await _db.AddAsync(entity);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
+            var result = await _db.AddAsync(entity);
+            return result.Entity;
         }
 
         public bool Update(T entity)

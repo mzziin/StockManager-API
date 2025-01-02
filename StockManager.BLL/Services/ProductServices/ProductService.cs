@@ -78,20 +78,20 @@ namespace StockManager.BLL.Services.ProductServices
                 Quantity = addProductDto.Quantity,
                 SubcategoryId = addProductDto.SubcategoryId,
             };
-            var status = await _unitOfWork.Products.InsertAsync(product);
+            var result = await _unitOfWork.Products.InsertAsync(product);
             await _unitOfWork.SaveAsync();
-            if (status)
+            if (result != null)
                 return new ResponseModel<outProductDto>
                 {
                     Status = true,
                     Message = "product added successfully",
                     Data = new outProductDto
                     {
-                        ProductName = product.ProductName,
-                        ProductDescription = product.ProductDescription,
-                        Price = product.Price,
-                        Quantity = product.Quantity,
-                        ProductId = product.ProductId,
+                        ProductName = result.ProductName,
+                        ProductDescription = result.ProductDescription,
+                        Price = result.Price,
+                        Quantity = result.Quantity,
+                        ProductId = result.ProductId
                     }
                 };
             return new ResponseModel<outProductDto>

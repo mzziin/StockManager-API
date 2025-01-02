@@ -9,7 +9,7 @@ namespace StockManager.DAL.Repositories
         Task<T?> GetByIdAsync(int id);
         Task<T?> GetByIdAsync(Guid id);
         Task<T?> GetByExpressionAsync(Expression<Func<T, bool>> expression);
-        Task<bool> InsertAsync(T entity);
+        Task<T> InsertAsync(T entity);
         bool Update(T entity);
         Task<bool> Delete(int id);
         Task<bool> Delete(Guid id);

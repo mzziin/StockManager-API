@@ -13,20 +13,25 @@ namespace StockManager.BLL.Services.CategoryServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseModel<object>> AddCategory(CategoryDto categoryDto)
+        public async Task<ResponseModel<outCategoryDto>> AddCategory(CategoryDto categoryDto)
         {
             var category = new Category { CategoryName = categoryDto.CategoryName };
-            var status = await _unitOfWork.Categories.InsertAsync(category);
+            var result = await _unitOfWork.Categories.InsertAsync(category);
             await _unitOfWork.SaveAsync();
-            if (status)
-                return new ResponseModel<object>
+            if (result != null)
+                return new ResponseModel<outCategoryDto>
                 {
-                    Status = status,
-                    Message = "category created successfully"
+                    Status = true,
+                    Message = "category created successfully",
+                    Data = new outCategoryDto
+                    {
+                        CategoryId = result.CategoryId,
+                        CategoryName = result.CategoryName
+                    }
                 };
-            return new ResponseModel<object>
+            return new ResponseModel<outCategoryDto>
             {
-                Status = status,
+                Status = false,
                 Message = "Something went wrong"
             };
         }
@@ -130,20 +135,25 @@ namespace StockManager.BLL.Services.CategoryServices
 
         }
 
-        public async Task<ResponseModel<object>> AddSubcategory(SubcategoryDto subcategoryDto, int categoryId)
+        public async Task<ResponseModel<outSubcategoryDto>> AddSubcategory(SubcategoryDto subcategoryDto, int categoryId)
         {
             var subcategory = new Subcategory { SubcategoryName = subcategoryDto.SubcategoryName, CategoryId = categoryId };
-            var status = await _unitOfWork.Subcategories.InsertAsync(subcategory);
+            var result = await _unitOfWork.Subcategories.InsertAsync(subcategory);
             await _unitOfWork.SaveAsync();
-            if (status)
-                return new ResponseModel<object>
+            if (result != null)
+                return new ResponseModel<outSubcategoryDto>
                 {
-                    Status = status,
-                    Message = "Subcategory created successfully"
+                    Status = true,
+                    Message = "Subcategory created successfully",
+                    Data = new outSubcategoryDto
+                    {
+                        SubcategoryId = result.SubcategoryId,
+                        SubcategoryName = result.SubcategoryName
+                    }
                 };
-            return new ResponseModel<object>
+            return new ResponseModel<outSubcategoryDto>
             {
-                Status = status,
+                Status = false,
                 Message = "Something went wrong"
             };
         }

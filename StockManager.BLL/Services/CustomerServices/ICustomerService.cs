@@ -7,7 +7,7 @@ namespace StockManager.BLL.Services.CustomerService
     {
         Task<ResponseModel<List<outCustomerDto>>> GetAllCustomers();
         Task<ResponseModel<outCustomerDto>> GetCustomerById(Guid customoerId);
-        Task<ResponseModel<object>> CreateCustomer(addCustomerDto addCustomerDto);
+        Task<ResponseModel<outCustomerDto>> CreateCustomer(addCustomerDto addCustomerDto);
         Task<ResponseModel<object>> DeleteCustomer(Guid customerId);
         Task<ResponseModel<object>> UpdateCustomer(Guid customerId, editCustomerDto editCustomerDto);
     }

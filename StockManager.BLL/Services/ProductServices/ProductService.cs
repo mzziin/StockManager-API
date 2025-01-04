@@ -36,7 +36,8 @@ namespace StockManager.BLL.Services.ProductServices
                     ProductName = p.ProductName,
                     ProductDescription = p.ProductDescription,
                     Quantity = p.Quantity,
-                    Price = p.Price
+                    Price = p.Price,
+                    SubcategoryId = p.SubcategoryId
                 }).ToList()
             };
         }
@@ -63,7 +64,8 @@ namespace StockManager.BLL.Services.ProductServices
                     ProductName = dbProduct.ProductName,
                     ProductDescription = dbProduct.ProductDescription,
                     Quantity = dbProduct.Quantity,
-                    Price = dbProduct.Price
+                    Price = dbProduct.Price,
+                    SubcategoryId = dbProduct.SubcategoryId
                 }
             };
         }
@@ -91,7 +93,8 @@ namespace StockManager.BLL.Services.ProductServices
                         ProductDescription = result.ProductDescription,
                         Price = result.Price,
                         Quantity = result.Quantity,
-                        ProductId = result.ProductId
+                        ProductId = result.ProductId,
+                        SubcategoryId = result.SubcategoryId
                     }
                 };
             return new ResponseModel<outProductDto>
@@ -138,7 +141,8 @@ namespace StockManager.BLL.Services.ProductServices
                         ProductDescription = product.ProductDescription,
                         Price = product.Price,
                         ProductId = product.ProductId,
-                        Quantity = product.Quantity
+                        Quantity = product.Quantity,
+                        SubcategoryId = product.SubcategoryId
                     }
                 };
             else
